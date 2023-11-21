@@ -33,7 +33,7 @@ const extractContacts = (arrayContacts) => {
   }
   return Object.keys(contactCounts);
 };
-
+//Função responsavel por formatar os contatos para envio de msgs
 const formattedNumbers = (array) => {
   const newNumbers = array.map((number) => `${number}@c.us`);
   return newNumbers
@@ -45,9 +45,9 @@ async function start(client) {
   let contactChat = extractContacts(chats);
   let contactSchedule = extractContacts(contacts);
   let arrayPreProcess = [...contactChat, ...contactSchedule];
-  const arrayProcess = formattedNumbers(arrayPreProcess)
-  console.log(arrayProcess);
-      arrayProcess.forEach(element => {
+  let arrayProcess = isValidNumber(arrayPreProcess)
+  const arrayFinal = formattedNumbers(arrayProcess)
+      arrayFinal.forEach(element => {
         client
         .sendText(element, "Welcome Venom 🕷")
         .then((result) => {
