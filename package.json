@@ -1,0 +1,19 @@
+{
+  "name": "sendmassive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/venomClient.js",
+    "dev": "nodemon src/venomClient.js"
+  },
+  "author": "nazarenoAlves",
+  "license": "ISC",
+  "dependencies": {
+    "venom-bot": "^5.0.21"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
