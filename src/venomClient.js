@@ -4,7 +4,7 @@ const venom = require("venom-bot");
 
 venom
   .create({
-    session: "sendMassive", //name of session
+    session: "sendMassive", //nome da sessão
     openBrowser: true,
     headless: "new",
   })
@@ -12,7 +12,7 @@ venom
   .catch((erro) => {
     console.log(erro);
   });
-
+//Função responsavel por validar os números de celulares que por padrão possuem 12 caracteres
 const isValidNumber = (array) => {
   let newArray = [];
   for (let i = 0; i < array.length; i++) {
@@ -23,34 +23,38 @@ const isValidNumber = (array) => {
   }
   return newArray;
 };
+//Função responsavel por extrair os números dos contatos do array de objetos 
 const extractContacts = (arrayContacts) => {
   const contactCounts = {};
-  for (const contacts of arrayContacts) {
-    const userId = contacts.id.user;
+  for (const contact of arrayContacts) {
+    const userId = contact.id.user;
     const contactCount = (contactCounts[userId] ?? 0) + 1;
     contactCounts[userId] = contactCount;
   }
   return Object.keys(contactCounts);
 };
 
+const formattedNumbers = (array) => {
+  const newNumbers = array.map((number) => `${number}@c.us`);
+  return newNumbers
+}
+
 async function start(client) {
   const chats = await client.getAllChats();
   const contacts = await client.getAllContacts();
   let contactChat = extractContacts(chats);
   let contactSchedule = extractContacts(contacts);
-  let arrayProcess = [...contactChat, ...contactSchedule];
-  console.log(isValidNumber(arrayProcess));
-  
-  client.onMessage((message) => {
-    if (message.body === "Hi" && message.isGroupMsg === false) {
-      client
-        .sendText(message.from, "Welcome Venom 🕷")
+  let arrayPreProcess = [...contactChat, ...contactSchedule];
+  const arrayProcess = formattedNumbers(arrayPreProcess)
+  console.log(arrayProcess);
+      arrayProcess.forEach(element => {
+        client
+        .sendText(element, "Welcome Venom 🕷")
         .then((result) => {
-          console.log("Result: ", result); //return object success
+          console.log("SUCESS!!!"); //return object success
         })
         .catch((erro) => {
           console.error("Error when sending: ", erro); //return object error
         });
-    }
-  });
+      });
 }
