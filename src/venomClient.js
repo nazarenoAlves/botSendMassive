@@ -6,7 +6,7 @@ venom
   .create({
     session: "sendMassive", //nome da sessão
     openBrowser: true,
-    headless: "new",
+    headless: false,
   })
   .then((client) => start(client))
   .catch((erro) => {
@@ -39,6 +39,18 @@ const formattedNumbers = (array) => {
   return newNumbers
 }
 
+// let textmsg = `🔥Black Friday na Câmaras e Pneus🔥
+// A Black Friday está chegando e a Câmaras e Pneus está preparando as melhores ofertas para você!
+// Dia 24, você poderá aproveitar descontos de até porcentagem em produtos selecionados.
+// Acesse o nosso site ou loja física e confira todas as ofertas!
+
+// Até lá!
+
+// Câmaras e Pneus
+
+// Executivo de Vendas: Ribamar Costa.
+// `
+
 async function start(client) {
   const chats = await client.getAllChats();
   const contacts = await client.getAllContacts();
@@ -47,14 +59,22 @@ async function start(client) {
   let arrayPreProcess = [...contactChat, ...contactSchedule];
   let arrayProcess = isValidNumber(arrayPreProcess)
   const arrayFinal = formattedNumbers(arrayProcess)
-      arrayFinal.forEach(element => {
-        client
-        .sendText(element, "Welcome Venom 🕷")
+  console.log(arrayFinal);
+  let index = 0;
+
+  const intervalId = setInterval(() => {
+    if (index < arrayFinal.length) {
+      client
+        .sendText(arrayFinal[index], textmsg)
         .then((result) => {
           console.log("SUCESS!!!"); //return object success
         })
         .catch((erro) => {
           console.error("Error when sending: ", erro); //return object error
         });
-      });
+      index++;
+    } else {
+      clearInterval(intervalId);
+    }
+  }, 30 * 1000);
 }
